@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2013 Team AOSPAL
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.android.keyguard;
 
 import android.app.INotificationManager;
@@ -53,8 +69,8 @@ public class NotificationViewManager {
 
     class Configuration extends ContentObserver {
         //User configurable values, set defaults here
-        public boolean showAlways = true;
-        public boolean pocketMode = true;
+        public boolean showAlways = false;
+        public boolean pocketMode = false;
         public boolean hideLowPriority = false;
         public boolean hideNonClearable = false;
         public boolean dismissAll = true;
@@ -64,7 +80,7 @@ public class NotificationViewManager {
         public int notificationsHeight = 4;
         public float offsetTop = 0.3f;
         public boolean privacyMode = false;
-        public boolean dynamicWidth = true;
+        public int notificationColor = 0x55555555;
 
         public Configuration(Handler handler) {
             super(handler);
@@ -96,9 +112,9 @@ public class NotificationViewManager {
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_PRIVACY_MODE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_DYNAMIC_WIDTH), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_EXCLUDED_APPS), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LOCKSCREEN_NOTIFICATIONS_COLOR), false, this);
         }
 
         @Override
@@ -126,15 +142,15 @@ public class NotificationViewManager {
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_FORCE_EXPANDED_VIEW, forceExpandedView ? 1 : 0) == 1
                     && !privacyMode;
             wakeOnNotification = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_WAKE_ON_NOTIFICATION, forceExpandedView ? 1 : 0) == 1;
+                    Settings.System.LOCKSCREEN_NOTIFICATIONS_WAKE_ON_NOTIFICATION, wakeOnNotification ? 1 : 0) == 1;
             notificationsHeight = Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_HEIGHT, notificationsHeight);
             offsetTop = Settings.System.getFloat(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_OFFSET_TOP, offsetTop);
-            dynamicWidth = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.LOCKSCREEN_NOTIFICATIONS_DYNAMIC_WIDTH, dynamicWidth ? 1 : 0) == 1;
             String excludedApps = Settings.System.getString(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_NOTIFICATIONS_EXCLUDED_APPS);
+            notificationColor = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.LOCKSCREEN_NOTIFICATIONS_COLOR, notificationColor);
 
             createExcludedAppsSet(excludedApps);
         }
@@ -171,13 +187,13 @@ public class NotificationViewManager {
         @Override
         public void onNotificationPosted(final StatusBarNotification sbn) {
             boolean screenOffAndNotCovered = !mIsScreenOn && mTimeCovered == 0;
-            boolean ongoingAndReposted = sbn.isOngoing() && mHostView.containsNotification(sbn);
-            if (mHostView.addNotification(sbn, (screenOffAndNotCovered || mIsScreenOn) && !ongoingAndReposted,
-                        config.forceExpandedView) && config.wakeOnNotification && screenOffAndNotCovered
-                        && !ongoingAndReposted
-                        && !QuietHoursHelper.inQuietHours(mContext, Settings.System.QUIET_HOURS_DIM)) {
+            boolean showNotification = !mHostView.containsNotification(sbn) || mHostView.getNotification(sbn).when != sbn.getNotification().when;
+            boolean added = mHostView.addNotification(sbn, (screenOffAndNotCovered || mIsScreenOn) && showNotification,
+                    config.forceExpandedView);
+            if (added && config.wakeOnNotification && screenOffAndNotCovered
+                      && showNotification && mTimeCovered == 0
+                      && !QuietHoursHelper.inQuietHours(mContext, Settings.System.QUIET_HOURS_DIM)) {
                 wakeDevice();
-                mHostView.showAllNotifications();
             }
         }
         @Override
@@ -299,5 +315,4 @@ public class NotificationViewManager {
         String[] appsToExclude = excludedApps.split("\\|");
         mExcludedApps = new HashSet<String>(Arrays.asList(appsToExclude));
     }
-
 }
