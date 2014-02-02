@@ -15,7 +15,9 @@
 
 package com.android.server;
 
-import com.android.internal.app.ThemeUtils;
+import android.content.pm.ThemeUtils;
+import android.provider.Settings.SettingNotFoundException;
+
 import com.android.internal.content.PackageMonitor;
 import com.android.internal.inputmethod.InputMethodUtils;
 import com.android.internal.inputmethod.InputMethodUtils.InputMethodSettings;
@@ -536,7 +538,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                 boolean changed = false;
 
                 if (curIm != null) {
-                    int change = isPackageDisappearing(curIm.getPackageName()); 
+                    int change = isPackageDisappearing(curIm.getPackageName());
                     if (change == PACKAGE_TEMPORARY_CHANGE
                             || change == PACKAGE_PERMANENT_CHANGE) {
                         ServiceInfo si = null;
@@ -1965,7 +1967,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                 // more quickly (not get stuck behind it initializing itself for the
                 // new focused input, even if its window wants to hide the IME).
                 boolean didStart = false;
-                        
+
                 switch (softInputMode&WindowManager.LayoutParams.SOFT_INPUT_MASK_STATE) {
                     case WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED:
                         if (!isTextEditor || !doAutoShow) {
@@ -2912,7 +2914,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                         "Requires permission "
                         + android.Manifest.permission.WRITE_SECURE_SETTINGS);
             }
-            
+
             long ident = Binder.clearCallingIdentity();
             try {
                 return setInputMethodEnabledLocked(id, enabled);
