@@ -788,7 +788,7 @@ const ResTable* AssetManager::getResTable(bool required) const
                             mZipSet.setZipResourceTableAsset(ap.path, ass);
                     }
                 }
-                
+
                 if (i == 0 && ass != NULL) {
                     // If this is the first resource table in the asset
                     // manager, then we are going to cache it so that we

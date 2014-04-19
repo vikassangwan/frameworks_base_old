@@ -314,6 +314,7 @@ private:
 
         bool isUpToDate();
 
+        void addOverlay(const asset_path& ap);
         bool getOverlay(size_t idx, asset_path* out) const;
 
     protected:

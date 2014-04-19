@@ -2817,6 +2817,14 @@ public final class Settings {
         public static final String LOCKSCREEN_GLOWPAD_TORCH = "lockscreen_glowpad_torch";
 
         /**
+         * Sets the lockscreen background style. Integer.
+         * @see LockscreenBackgroundUtil#LOCKSCREEN_STYLE_DEFAULT
+         * @see LockscreenBackgroundUtil#LOCKSCREEN_STYLE_IMAGE
+         * @hide
+         */
+        public static final String LOCKSCREEN_BACKGROUND_STYLE = "lockscreen_background_style";
+
+        /**
          * @deprecated Use {@link android.provider.Settings.Global#LOW_BATTERY_SOUND}
          * instead
          * @hide

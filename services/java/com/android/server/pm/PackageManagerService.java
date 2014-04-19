@@ -32,7 +32,6 @@ import static libcore.io.OsConstants.S_IXGRP;
 import static libcore.io.OsConstants.S_IROTH;
 import static libcore.io.OsConstants.S_IXOTH;
 
-import com.android.internal.app.IAssetRedirectionManager;
 import android.util.Pair;
 import com.android.internal.app.IMediaContainerService;
 import com.android.internal.app.ResolverActivity;

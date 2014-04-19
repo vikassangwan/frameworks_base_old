@@ -66,7 +66,7 @@ import static android.content.pm.ThemeUtils.THEME_BOOTANIMATION_PATH;
 
 import java.util.List;
 
-import com.android.internal.util.cm.LockscreenBackgroundUtil;
+import com.android.internal.util.ose.LockscreenBackgroundUtil;
 
 /**
  * {@hide}

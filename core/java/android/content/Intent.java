@@ -1774,6 +1774,14 @@ public class Intent implements Parcelable, Cloneable {
         "android.intent.action.EXTERNAL_APPLICATIONS_AVAILABLE";
 
     /**
+     * Broadcast Action: The current keyguard wallpaper configuration
+     * has changed and should be re-read.
+     * {@hide}
+     */
+    public static final String ACTION_KEYGUARD_WALLPAPER_CHANGED =
+            "android.intent.action.KEYGUARD_WALLPAPER_CHANGED";
+
+    /**
      * Broadcast Action: Resources for a set of packages are currently
      * unavailable since the media on which they exist is unavailable.
      * The extra data {@link #EXTRA_CHANGED_PACKAGE_LIST} contains a

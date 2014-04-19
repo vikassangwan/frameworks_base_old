@@ -5084,12 +5084,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
-    BroadcastReceiver mThemeChangeReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            mUiContext = null;
-        }
-    };
-
     @Override
     public void screenTurnedOff(int why) {
         EventLog.writeEvent(70000, 0);

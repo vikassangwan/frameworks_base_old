@@ -351,7 +351,6 @@ public class ResourcesManager {
                 DisplayMetrics dm = defaultDisplayMetrics;
                 final boolean hasOverrideConfiguration = key.hasOverrideConfiguration();
                 boolean themeChanged = (changes & ActivityInfo.CONFIG_UI_THEME_MODE) != 0;
-                if ((!isDefaultDisplay || hasOverrideConfiguration)) {
                 boolean themeChanged2 = (changes & ActivityInfo.CONFIG_THEME_RESOURCE) != 0;
                 if (themeChanged2) {
                     AssetManager am = r.getAssets();
@@ -383,19 +382,6 @@ public class ResourcesManager {
                 }
                 if (themeChanged || themeChanged2) {
                     r.updateStringCache();
-                }
-
-                themeChanged2 = (changes & ActivityInfo.CONFIG_THEME_RESOURCE) != 0;
-                if ((!isDefaultDisplay || hasOverrideConfiguration)) {
-		            if (themeChanged2) {
-		                AssetManager am = r.getAssets();
-		                if (am.hasThemeSupport()) {
-		                    detachThemeAssets(am);
-		                    if (!TextUtils.isEmpty(config.customTheme.getThemePackageName())) {
-		                        attachThemeAssets(am, config.customTheme);
-		                    }
-		                }
-		            }
                 }
                 //Slog.i(TAG, "Updated app resources " + v.getKey()
                 //        + " " + r + ": " + r.getConfiguration());
