@@ -1456,7 +1456,7 @@ public class NotificationManagerService extends INotificationManager.Stub
                 }
             } else if (action.equals(Intent.ACTION_USER_PRESENT)) {
                 // turn off LED when user passes through lock screen
-                if (!mDreaming && !mScreenOnNotificationLed) {
+                if (!mDreaming) {
                     if (mLedNotification == null) {
                         mNotificationLight.turnOff();
                     }
