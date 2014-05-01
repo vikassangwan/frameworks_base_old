@@ -84,7 +84,7 @@ import android.view.ViewManager;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import com.android.internal.util.liquid.TorchConstants;
+import com.android.internal.util.ose.TorchConstants;
 
 /**
  * Manages creating, showing, hiding and resetting the keyguard.  Calls back
@@ -134,10 +134,6 @@ public class KeyguardViewManager {
     private boolean mIsCoverflow = true;
     private boolean mLoadWallpaper;
     private String mWallpaperFile;
-
-    private NotificationHostView mNotificationView;
-    private NotificationViewManager mNotificationViewManager;
-    private boolean mLockscreenNotifications = true;
 
     private boolean mUnlockKeyDown = false;
 
@@ -275,37 +271,6 @@ public class KeyguardViewManager {
     private boolean shouldEnableTranslucentDecor() {
         Resources res = mContext.getResources();
         return res.getBoolean(R.bool.config_enableLockScreenTranslucentDecor);
-    }
-
-    public void setBackgroundBitmap(Bitmap bmp) {
-        if (mSeeThrough) {
-                bmp = blurBitmap(bmp, mBlurRadius);
-        }
-        mCustomBackground = new BitmapDrawable(mContext.getResources(), bmp);
-    }
-
-    private Bitmap blurBitmap(Bitmap bmp, int radius) {
-        Bitmap tmpBmp = bmp;
-
-        // scale image if it's too large
-        if (bmp.getWidth() > MAX_BLUR_WIDTH)
-            tmpBmp = bmp.createScaledBitmap(bmp, MAX_BLUR_WIDTH, MAX_BLUR_HEIGHT, false);
-
-        Bitmap out = Bitmap.createBitmap(bmp);
-        RenderScript rs = RenderScript.create(mContext);
-
-        Allocation input = Allocation.createFromBitmap(
-                rs, tmpBmp, MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
-        Allocation output = Allocation.createTyped(rs, input.getType());
-
-        ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
-        script.setInput(input);
-        script.setRadius(radius);
-        script.forEach(output);
-
-        output.copyTo(out);
-
-        return out;
     }
 
     private void setCustomBackground(Bitmap bmp) {
