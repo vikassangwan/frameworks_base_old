@@ -226,7 +226,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     Display mDisplay;
     Point mCurrentDisplaySize = new Point();
     int mCurrUiThemeMode;
-    int mCurrentDensity;
+
     int mCurrOrientation;
     private float mHeadsUpVerticalOffset;
     private int[] mPilePosition = new int[2];
@@ -999,7 +999,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         mCurrUiThemeMode = mContext.getResources().getConfiguration().uiThemeMode;
-        mCurrentDensity = mContext.getResources().getConfiguration().densityDpi;
+
 
         mLocationController = new LocationController(mContext); // will post a notification
         mBatteryController = new BatteryController(mContext);
@@ -4177,13 +4177,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             recreateStatusBar(false);
         }
 
-        // detect density change
-        int density = res.getConfiguration().densityDpi;
-        if (density != mCurrentDensity) {
-            mCurrentDensity = density;
-            recreateStatusBar(true);
-            return;
-        }
+
+
+
+
+
+
+
 
         if (mClearButton instanceof TextView) {
             ((TextView)mClearButton).setText(
