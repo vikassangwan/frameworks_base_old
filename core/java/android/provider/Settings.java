@@ -2995,11 +2995,17 @@ public final class Settings {
         public static final String STATUSBAR_CLOCK_DATE_FORMAT = "statusbar_clock_date_format";
 
         /**
+         * Settings for clock font style
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_FONT_STYLE = "statusbar_clock_font_style";
+         
+        /**
          * What application to launch when the user click the clock in the notification bar
          * @hide
          */
         public static final String CLOCK_SHORTCUT = "clock_shortcut";
-
+         
         /**
          * What application to launch when the user click the calendar in the notification bar
          * @hide
